@@ -13,7 +13,7 @@ module Noratext
           children << elem
         end
         postprocess(sequence)
-        { :name => @name, :children => children }
+        ParsedData.new(@name, children)
       end
     end
 
@@ -41,6 +41,10 @@ module Noratext
         @opentag = sequence.shift[:tag]
       end
 
+      def is_end_of_element(token)
+        is_closetag(token)
+      end
+      
       def postprocess(sequence)
         log @opentag[:line], "#{@name} is not closed}" if sequence.size == 0 || !is_closetag(sequence[0])
       end
@@ -48,13 +52,13 @@ module Noratext
 
     module ParseToken
       def process(sequence)
-        return { :name => @name }.merge(@parse_token_proc.call(sequence.shift))
+        return ParsedData.new(@name).merge!(@parse_token_proc.call(sequence.shift))
       end
     end
 
     module ParseSequence
       def process(sequence)
-        return { :name => @name }.merge(@parse_sequence_proc.call(sequence))
+        return ParsedData.new(@name).merge!(@parse_sequence_proc.call(sequence))
       end
     end
     
@@ -92,8 +96,20 @@ module Noratext
 
       def postprocess(sequence)
       end
+
+      def is_end_of_element(token)
+        false
+      end
       
       def process_one_element(sequence)
+
+        while (sequence.size > 0 && sequence[0][:kind] == :closetag)
+          return nil if (is_end_of_element(sequence[0]))
+          log sequence[0][:line],"no opentag for #{sequence[0][:type]}"
+          sequence.shift
+        end
+        return nil if (sequence.size == 0) 
+
         element_to_parse.each {
           |element|
           return element.process(sequence) if element.accept?(sequence[0])
@@ -120,6 +136,7 @@ module Noratext
       def accepts(type)
         @accept_type = type
       end
+
       def parse_token(&block)
         raise 'already defined as parse sequence type' if !@parse_sequence_proc.nil?
         @parse_token_proc = block
@@ -137,6 +154,33 @@ module Noratext
       def log(lineno, log)
         @logger.call(lineno, log) if !@logger.nil?
       end
+    end
+
+    class ParsedData
+      attr_accessor :type, :children
+      def initialize(type, children = [])
+        @attributes = {}
+        @children = children
+        @type = type
+      end
+
+      def is_leaf?
+        @children.size == 0
+      end
+
+      def merge!(value)
+        @attributes.merge!(value)
+        self
+      end
+
+      def [](attr)
+        @attributes[attr]
+      end
+
+      def []=(attr, value)
+        @attributes[attr, value]
+      end
+      
     end
   end
 end

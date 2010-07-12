@@ -9,6 +9,16 @@ current version supports xml-like, but not valid-xml  (like old HTML) markup.
 
 will support wiki-style markup soon.
 
+== FEATURES
+
+* Noratext::Lexer/Noratext::Parser provides functionalty to parse markuped text.
+
+== PROBLEMS
+
+* only provides xml-style tags support.
+
+* need to write duplicated rules for Lexar and Parser. e.g., need to define same tag  for Lexar and Parser.
+
 == SYNOPSIS
 
 === lexer : style A
@@ -30,7 +40,6 @@ end
 
 # use the lexer
 Noratext::Lexer[:my_ml].parse(io)
-
 
 === lexer : style B
 # define symbols

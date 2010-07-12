@@ -34,7 +34,7 @@ Noratext::Parser.define :ydml do
   element :hasen do
     parse_token do
       |token|
-      ""
+      {}
     end
   end
 

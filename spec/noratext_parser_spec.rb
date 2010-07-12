@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require File.expand_path(File.dirname(__FILE__) + '/../lib/noratext/ydml_grammer_definition')
+require File.expand_path(File.dirname(__FILE__) + '/ydml_grammer_definition')
 
 describe "Noratext::Parser" do
 

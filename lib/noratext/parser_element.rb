@@ -165,10 +165,11 @@ module Noratext
 
     class ParsedData
       attr_accessor :type, :children
+
       def initialize(type, children = [])
-        @attributes = {}
         @children = children
         @type = type
+        @attributes = {}
       end
 
       def is_leaf?
@@ -176,13 +177,13 @@ module Noratext
       end
 
       def set_attributes(value)
+        @attributes.merge!(value)
         value.each {
           |k,v|
           (class<<self;self;end).instance_eval{define_method(k){v}}
         }
         self
       end
-
     end
   end
 end

@@ -21,7 +21,7 @@ module Noratext
       @tags = {}
     end
 
-    def analyze(io)
+    def process(io)
       result = []
       while line = io.gets
         result = result + read_line(line, io.lineno)
@@ -39,7 +39,6 @@ module Noratext
     def symbol(symbol, &block)
       @tags[symbol] = tag_class.new(symbol)
       @tags[symbol].instance_eval(&block)
-      
     end
 
     def match_pattern(tag, pattern)
@@ -65,6 +64,24 @@ module Noratext
     def read_line(s, line_no)
       return [] if s == ""
       result = []
+
+      if @rawtext_tag
+        matched = /#{@rawtext_close_tag}/.match(s)
+        if matched.nil?
+          return [{ :type => :text, :data => s, :line => line_no }]
+        else
+          result << { :type => :text, :data => matched.pre_match, :line => line_no }
+          result << {
+            :type => :tag,
+            :data => matched[0],
+            :tag => { :name => @rawtext_tag.name }.merge(@rawtext_tag.parse_attribute(matched[0])),
+            :line => line_no }
+          @rawtext_tag = nil
+          @rawtext_close_tag = nil
+          return result + read_line(matched.post_match, line_no)
+        end
+      end
+
       t = factory(s)
       if (t.nil?)
         return [{ :type => :text, :data => s, :line => line_no }]
@@ -76,7 +93,6 @@ module Noratext
     end
     
     def factory(s)
-      result = []
       matched = @tags.map {
         |name, tag|
         { :tag => tag, :match => tag.matcher(s) } 
@@ -108,7 +124,8 @@ module Noratext
         @with_close = false
       end
 
-      def rawtext_till_close(tag)
+      def rawtext_till_close(tag = nil)
+        tag ||= closetag_for(@name)
         @rawtext_till_close_tag = tag
       end
 

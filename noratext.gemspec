@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
      "lib/noratext/parser_element.rb",
      "lib/noratext/xmly_lexer.rb",
      "lib/noratext/ydml_grammer_definition.rb",
+     "noratext.gemspec",
      "spec/noratext_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"

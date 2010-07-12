@@ -1,16 +1,64 @@
 = noratext
 
-Description goes here.
+* http://github.com/skoji/noratext
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== DESCRIPTION:
+
+noratext is a simple (and rather stupid) lexer and parser generator for loosly marked-up text.
+current version supports xml-like, but not valid-xml  (like old HTML) markup.
+
+will support wiki-style markup soon.
+
+== SYNOPSIS
+
+=== lexer : style A
+# define lexer :my_ml。
+Noratext::Lexer.define :my_ml, :xml_style do
+   symbols :chapter, :section, :strong, :center, :right, :font-size, :blockquote, :code, :change_paragraph
+
+   without_close :change_paragraph
+   match_pattern :change_paragraph, 'p' # tag is <p> , not <change-paragraph>
+   rawtext_till_close :code
+   
+   # add attribute parser
+   add_parser :font-size do
+     |s|
+	 /size="(.?)"/ =~ s
+	 { :size => $1 }
+   end
+end
+
+# use the lexer
+Noratext::Lexer[:my_ml].parse(io)
+
+
+=== lexer : style B
+# define symbols
+Noratext::Lexer.define :my_ml, :xml_style do
+   symbol :chapter
+   symbol :section
+   symbol :strong
+   symbol :center
+   symbol :right
+   symbol :blockquote
+   symbol :font-size
+     add_parser do
+       |s|
+  	   /size="(.?)"/ =~ s
+  	   { :size => $1 }
+     end
+   end
+   symbol :code do
+     rawtext_till_close
+   end
+   symbol :change_paragraph do
+     without_close 
+	 match_pattern 'p'
+   end
+end
+
+# use the lexer
+Noratext::Lexer[:my_ml].parse(io)
 
 == Copyright
 

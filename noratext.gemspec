@@ -28,13 +28,13 @@ Gem::Specification.new do |s|
      "lib/noratext/parser.rb",
      "lib/noratext/parser_element.rb",
      "lib/noratext/xmly_lexer.rb",
-     "lib/noratext/ydml_grammer_definition.rb",
      "noratext.gemspec",
      "spec/noratext_lexer_spec.rb",
      "spec/noratext_parser_spec.rb",
      "spec/noratext_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/ydml_grammer_definition.rb"
   ]
   s.homepage = %q{http://github.com/skoji/noratext}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -45,7 +45,8 @@ Gem::Specification.new do |s|
     "spec/noratext_lexer_spec.rb",
      "spec/noratext_parser_spec.rb",
      "spec/noratext_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "spec/ydml_grammer_definition.rb"
   ]
 
   if s.respond_to? :specification_version then

@@ -1,22 +1,41 @@
 module Noratext
-  @parsers = {}
   class Parser
+    @instances_block = {}
     def self.define(name, style = :xml_style, &block)
-      parser = Perser.new
-      @parsers[name] = parser
-      parser.instance_eval(block)
+      parser = Parser.new
+      @instances_block[name] = block
+      parser.instance_eval(&block) # for check only
+    end
+
+    def self.[](name)
+      parser = Parser.new
+      parser.instance_eval(&@instances_block[name])
+      parser
     end
 
     def element(name, &block)
-      element = Element.new(name)
+      element = Element.new(name, method(:logger), @elements)
+      @start_element = element if @elements.size == 0
       @elements[name] = element
-      element.instance_eval(block)
+      element.instance_eval(&block)
     end
 
     def initialize
       @elements = {}
+      @log = []
     end
 
+    def parse(sequence)
+      @start_element.process(sequence)
+    end
+
+    def logger(lineno, log)
+      @log << { :lineno => lineno, :log => log}
+    end
+
+    def log
+      @log.sort_by { |entry| entry[:lineno] }.map { |entry| "#{entry[:lineno]}: #{entry[:log]}" }
+    end
     
   end
 end

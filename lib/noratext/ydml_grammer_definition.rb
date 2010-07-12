@@ -8,27 +8,27 @@ Noratext::Parser.define :ydml do
   end
 
   element :paragraph do
-    contains[ :text, :large, :small, :bold, :image, :sonomama, :ruby ]
+    contains :text, :large, :small, :bold, :image, :sonomama, :ruby 
   end
   
   element :center do
     open_close 
-    contains [ :paragraph ]
+    contains :paragraph
   end
 
   element :left do
     open_close 
-    contains [ :paragraph ]
+    contains :paragraph 
   end
 
   element :right do
     open_close 
-    contains [ :paragraph ]
+    contains :paragraph 
   end
 
   element :quote do
     open_close
-    contains [ :paragraph ]
+    contains :paragraph
   end
 
   element :hasen do
@@ -39,6 +39,7 @@ Noratext::Parser.define :ydml do
   end
 
   element :text do
+    accepts :text
     parse_sequence do
       |sequence|
       data = ""
@@ -52,20 +53,20 @@ Noratext::Parser.define :ydml do
 
   element :large do
     open_close
-    contains [ :paragraph ]
+    contains  :paragraph 
   end
 
   element :small do
     open_close
-    contains [ :paragraph ]
+    contains  :paragraph 
   end
 
   element :bold do
     open_close
-    contains [ :paragraph ]
+    contains :paragraph
   end
 
-  terminal_element :image do
+  element :image do
     parse_token do
       |token|
       { :imagepath => token[:imagepath], :size => token[:size] }

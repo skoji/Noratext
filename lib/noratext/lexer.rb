@@ -72,10 +72,11 @@ module Noratext
         else
           result << { :type => :text, :data => matched.pre_match, :line => line_no }
           result << {
-            :type => :tag,
+            :type => @rawtext_tag.name,
             :data => matched[0],
-            :tag => { :name => @rawtext_tag.name }.merge(@rawtext_tag.parse_attribute(matched[0])),
-            :line => line_no }
+            :line => line_no,
+            :tag => { :name => @rawtext_tag.name }.merge(@rawtext_tag.parse_attribute(matched[0])) }
+
           @rawtext_tag = nil
           @rawtext_close_tag = nil
           return result + read_line(matched.post_match, line_no)
@@ -87,7 +88,7 @@ module Noratext
         return [{ :type => :text, :data => s, :line => line_no }]
       else
         result << { :type => :text, :data => t[:pre], :line => line_no } if t[:pre] != ""
-        result << { :type => :tag, :data => t[:data], :tag => t[:tag], :line => line_no }
+        result << { :type => t[:tag][:name], :data => t[:data], :line => line_no, :tag => t[:tag] }
         result + read_line(t[:rest], line_no)
       end
     end
@@ -106,7 +107,7 @@ module Noratext
       { :pre => m.pre_match,
         :rest => m.post_match,
         :data => m[0],
-        :tag => { :name => tag.name}.merge(tag.parse_attribute(m[0])) }
+        :tag => { :name => tag.name }.merge(tag.parse_attribute(m[0]))  }
     end
     
     class Tag

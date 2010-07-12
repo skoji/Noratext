@@ -65,18 +65,15 @@ describe "Noratext::Lexer" do
 
     processed = lexer.process(io)
     processed.size.should == 7
-    processed[0][:type].should == :tag
-    processed[0][:tag][:name].should == :quote
+    processed[0][:type].should == :quote
     processed[1][:type].should == :text
     processed[1][:data].should == "この部分は、<center>とかはいっていても、そのまま見えるはず。\n"
     processed[2][:type].should == :text
     processed[2][:data].should == '<bold>改行</bold>しても、扱えるはず。'
-    processed[3][:type].should == :tag
-    processed[3][:tag][:name].should == :quote    
+    processed[3][:type].should == :quote
     processed[4][:type].should == :text
     processed[4][:data].should == 'このへんは、タグを'
-    processed[5][:type].should == :tag
-    processed[5][:tag][:name].should == :center
+    processed[5][:type].should == :center
     processed[6][:type].should == :text
     processed[6][:data].should == '読む。'
   end

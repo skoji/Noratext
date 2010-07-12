@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
      "lib/noratext/xmly_lexer.rb",
      "lib/noratext/ydml_grammer_definition.rb",
      "noratext.gemspec",
-     "spec/noratext_spec.rb",
+     "spec/noratext_lexer_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
@@ -40,7 +40,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{noratext: simple lexer/parser generator for markuped text}
   s.test_files = [
-    "spec/noratext_spec.rb",
+    "spec/noratext_lexer_spec.rb",
+     "spec/noratext_parser_spec.rb",
+     "spec/noratext_spec.rb",
      "spec/spec_helper.rb"
   ]
 

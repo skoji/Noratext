@@ -47,5 +47,14 @@ describe "Noratext::Lexer" do
     tag[:tag][:scale].should be_nil
   end
 
+  it "should create parse path" do
+    lexer = Noratext::Lexer[:test]
+    tag = lexer.factory('<img src="../img/path.jpg" scale="90%">')
+    tag[:tag][:name].should == :image
+    tag[:tag][:kind].should == :opentag
+    tag[:tag][:path].should == '../img/path.jpg'
+    tag[:tag][:scale].should == '90%'
+  end
+
   
 end

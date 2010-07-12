@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "noratext"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{ noratext: simple lexer/parser generator for markuped text}
+    gem.description = %Q{noratext is a simple (and rather stupid) lexer and parser generator for loosly markuped text.  }
     gem.email = "skoji@mac.com"
     gem.homepage = "http://github.com/skoji/noratext"
     gem.authors = ["KOJIMA Satoshi"]

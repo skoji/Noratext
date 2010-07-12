@@ -1,8 +1,6 @@
 module Noratext
   @parsers = {}
   class Parser
-
-
     def self.define(name, style = :xml_style, &block)
       parser = Perser.new
       @parsers[name] = parser

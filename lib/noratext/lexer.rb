@@ -36,14 +36,20 @@ module Noratext
       }
     end
 
+    def symbol(symbol, &block)
+      @tags[symbol] = tag_class.new(symbol)
+      @tags[symbol].instance_eval(&block)
+      
+    end
+
     def match_pattern(tag, pattern)
-      @tags[tag].match_pattern = pattern
+      @tags[tag].match_pattern pattern
     end
 
     def without_close(*tags)
       tags.each {
         |tag|
-        @tags[tag].with_close = false
+        @tags[tag].without_close
       }
     end
     
@@ -53,7 +59,7 @@ module Noratext
 
     def rawtext_till_close(tag, closetag = nil)
       closetag ||= closetag_for(tag)
-      @tags[tag].rawtext_till_close  = closetag
+      @tags[tag].rawtext_till_close closetag
     end
 
     def read_line(s, line_no)
@@ -80,7 +86,7 @@ module Noratext
       m = matched[0][:match]
       tag = matched[0][:tag]
 
-      @rawtext_tag = tag if @rawtext_close_tag = tag.rawtext_till_close
+      @rawtext_tag = tag if @rawtext_close_tag = tag.rawtext_till_close_tag
       { :pre => m.pre_match,
         :rest => m.post_match,
         :data => m[0],
@@ -88,16 +94,32 @@ module Noratext
     end
     
     class Tag
-      attr_accessor :name, :match_pattern, :attribute_parsers, :with_close, :rawtext_till_close
+      attr_accessor :name, :attribute_parsers, :rawtext_till_close_tag
 
       def initialize(name)
         @name = name
         @match_pattern = name.to_s
         @attribute_parsers = []
         @with_close = true
-        @rawtext_till_close = nil
+        @rawtext_till_close_tag = nil
       end
 
+      def without_close
+        @with_close = false
+      end
+
+      def rawtext_till_close(tag)
+        @rawtext_till_close_tag = tag
+      end
+
+      def add_parser(&block)
+        @attribute_parsers << block
+      end
+
+      def match_pattern(pattern)
+        @match_pattern = pattern
+      end
+      
       def parse_attribute(s)
         result = {}
         @attribute_parsers.each {

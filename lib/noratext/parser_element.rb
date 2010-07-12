@@ -1,9 +1,5 @@
 module Noratext
-  module Parser
-    module OpenClose
-      def accept
-    end
-
+  class Parser
     class Element
       def initialize(name)
         @name = name

@@ -14,7 +14,7 @@ module Noratext
       "</#{tag.to_s}>"
     end
 
-    class XmlyTag < YDML::Lexer::Tag
+    class XmlyTag < Lexer::Tag
       def self.default_attribute_parser
         lambda {
           |s|
@@ -29,7 +29,7 @@ module Noratext
       
       def matcher(s)
         tagpattern = "<#{@match_pattern}.*?>"
-        tagpattern = "</?#{@match_pattern}.*?>" if with_close
+        tagpattern = "</?#{@match_pattern}.*?>" if @with_close
         /#{tagpattern}/.match s
       end
     end

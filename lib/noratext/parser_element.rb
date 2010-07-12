@@ -46,19 +46,26 @@ module Noratext
       end
       
       def postprocess(sequence)
-        log @opentag[:line], "#{@name} is not closed}" if sequence.size == 0 || !is_closetag(sequence[0])
+        return if sequence.size == 0
+
+        if is_closetag(sequence[0])
+          sequence.shift
+          return
+        end
+
+        log @opentag[:line], "#{@name} is not closed}"
       end
     end
 
     module ParseToken
       def process(sequence)
-        return ParsedData.new(@name).merge!(@parse_token_proc.call(sequence.shift))
+        return ParsedData.new(@name).set_attributes(@parse_token_proc.call(sequence.shift))
       end
     end
 
     module ParseSequence
       def process(sequence)
-        return ParsedData.new(@name).merge!(@parse_sequence_proc.call(sequence))
+        return ParsedData.new(@name).set_attributes(@parse_sequence_proc.call(sequence))
       end
     end
     
@@ -168,19 +175,14 @@ module Noratext
         @children.size == 0
       end
 
-      def merge!(value)
-        @attributes.merge!(value)
+      def set_attributes(value)
+        value.each {
+          |k,v|
+          (class<<self;self;end).instance_eval{define_method(k){v}}
+        }
         self
       end
 
-      def [](attr)
-        @attributes[attr]
-      end
-
-      def []=(attr, value)
-        @attributes[attr, value]
-      end
-      
     end
   end
 end

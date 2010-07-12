@@ -82,10 +82,10 @@ Noratext::Parser.define :ydml do
     parse_sequence do
       |sequence|
       sequence.shift
-      /(.+?)\/(.+?)/ =~ sequence[0][:data]
+      /(.+)\/(.+)/ =~ sequence[0][:data]
       raise "#{sequence[0][:data]} is invalid inside ruby tag." if $1.nil?
       sequence.shift
-      raise "rubytag is not closed" if !is_closetag_of(:ruby, sequence[0])
+      raise "rubytag is not closed" if !is_closetag(sequence[0])
       sequence.shift
       { :body => $1, :ruby => $2 }
     end

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["KOJIMA Satoshi"]
-  s.date = %q{2010-07-12}
+  s.date = %q{2010-07-13}
   s.description = %q{noratext is a simple (and rather stupid) lexer and parser generator for loosly markuped text.  }
   s.email = %q{skoji@mac.com}
   s.extra_rdoc_files = [
@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
      "lib/noratext/ydml_grammer_definition.rb",
      "noratext.gemspec",
      "spec/noratext_lexer_spec.rb",
+     "spec/noratext_parser_spec.rb",
+     "spec/noratext_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]

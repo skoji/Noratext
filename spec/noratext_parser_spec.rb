@@ -45,7 +45,7 @@ end
 describe Noratext::Parser do
   it "should parse valid test" do
     seq = [ { :type => :text, :data=>'これが中身', :line => 1} ]
-    result = Noratext::Parser[:ydml].parse(seq)
+    result = Noratext::Parser.generate(:ydml).parse(seq)
     result.type.should == :document
     result.is_leaf?.should_not be_true
     result.children.size.should == 1
@@ -65,7 +65,7 @@ describe Noratext::Parser do
             { :type => :ruby,:tag => { :name => :ruby, :kind => :closetag }}
           ]
 
-    parser = Noratext::Parser[:ydml]
+    parser = Noratext::Parser.generate(:ydml)
     result = parser.parse(seq)
     result.type.should == :document
     parser.log.size.should == 0

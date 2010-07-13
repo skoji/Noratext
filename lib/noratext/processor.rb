@@ -11,7 +11,7 @@ module Noratext
 
     def process(parsedData)
       @stack.push(parsedData)
-      @processors[parsedData.type].call(parsedData, stack)
+      @processors[parsedData.type].call(parsedData)
       @stack.pop
     end
     

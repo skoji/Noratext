@@ -11,7 +11,7 @@ module Noratext
       lexer.instance_eval(&block) # for check only
     end
 
-    def self.[](name)
+    def self.generate(name)
       lexer = @instances_block[name][:lexer_class].new
       lexer.instance_eval(&@instances_block[name][:block])
       lexer
@@ -20,7 +20,6 @@ module Noratext
     def initialize
       @tags = {}
     end
-
     def process(io)
       result = []
       while line = io.gets

@@ -28,7 +28,7 @@ describe "Noratext::Lexer" do
   end
 
   it "should parse tag correctly" do
-    lexer = Noratext::Lexer[:test]
+    lexer = Noratext::Lexer.generate(:test)
     opentag = lexer.factory('<center>')
     closetag = lexer.factory('</center>')
 
@@ -40,7 +40,7 @@ describe "Noratext::Lexer" do
   end
 
   it "should create parse path" do
-    lexer = Noratext::Lexer[:test]
+    lexer = Noratext::Lexer.generate(:test)
     tag = lexer.factory('<img src="../img/path.jpg">')
     tag[:tag][:name].should == :image
     tag[:tag][:kind].should == :opentag
@@ -49,7 +49,7 @@ describe "Noratext::Lexer" do
   end
 
   it "should create parse path" do
-    lexer = Noratext::Lexer[:test]
+    lexer = Noratext::Lexer.generate(:test)
     tag = lexer.factory('<img src="../img/path.jpg" scale="90%">')
     tag[:tag][:name].should == :image
     tag[:tag][:kind].should == :opentag
@@ -58,7 +58,7 @@ describe "Noratext::Lexer" do
   end
 
   it "should parse rawtext tag" do
-    lexer = Noratext::Lexer[:test]
+    lexer = Noratext::Lexer.generate(:test)
     text = "<quote>この部分は、<center>とかはいっていても、そのまま見えるはず。
 <bold>改行</bold>しても、扱えるはず。</quote>このへんは、タグを<center>読む。"
     io = StringIO.new(text)

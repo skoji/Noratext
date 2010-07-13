@@ -7,7 +7,7 @@ module Noratext
       parser.instance_eval(&block) # for check only
     end
 
-    def self.[](name)
+    def self.generate(name)
       parser = Parser.new
       parser.instance_eval(&@instances_block[name])
       parser

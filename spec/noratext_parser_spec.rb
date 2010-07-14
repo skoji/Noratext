@@ -68,7 +68,7 @@ describe Noratext::Parser do
     parser = Noratext::Parser.generate(:ydml)
     result = parser.parse(seq)
     result.type.should == :document
-    parser.log.size.should == 0
+    result.log.size.should == 0
     result.children.size.should == 2
     result.children[0].is_leaf?.should_not be_true
     result.children[0].type.should == :center

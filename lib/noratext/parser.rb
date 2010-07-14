@@ -28,6 +28,7 @@ module Noratext
     def parse(sequence)
       result = @start_element.process(sequence)
       logger sequence[0][:line], "unexpected #{sequence[0][:data]}" if (sequence.size > 0)
+      result.set_attributes({ :log => log })
       result
     end
 

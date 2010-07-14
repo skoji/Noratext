@@ -29,7 +29,6 @@ Gem::Specification.new do |s|
      "lib/noratext/parser_element.rb",
      "lib/noratext/processor.rb",
      "lib/noratext/xmly_lexer.rb",
-     "noratext.gemspec",
      "spec/noratext_lexer_spec.rb",
      "spec/noratext_parser_spec.rb",
      "spec/noratext_spec.rb",

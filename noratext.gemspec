@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
      "noratext.gemspec",
      "spec/noratext_lexer_spec.rb",
      "spec/noratext_parser_spec.rb",
+     "spec/noratext_processor_spec.rb",
      "spec/noratext_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",

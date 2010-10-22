@@ -6,14 +6,14 @@ module Noratext
         @element_to_parse ||= @contains.map { |element_name| @elements[element_name] }
       end
       
-      def process(sequence)
+      def process(sequence, parent)
         preprocess(sequence)
         children = []
-        while (sequence.size > 0 && elem = process_one_element(sequence))
+        while (sequence.size > 0 && elem = process_one_element(sequence, parent))
           children << elem
         end
         postprocess(sequence)
-        ParsedData.new(@name, children)
+        ParsedData.new(@name, parent, children)
       end
     end
 
@@ -22,8 +22,8 @@ module Noratext
         @element_to_parse ||= @is_oneof.map { |element_name| @elements[element_name] }
       end
 
-      def process(sequence)
-        if sequence.size > 0 && elem = process_one_element(sequence)
+      def process(sequence, parent)
+        if sequence.size > 0 && elem = process_one_element(sequence, parent)
           elem
         else
           nil
@@ -58,14 +58,14 @@ module Noratext
     end
 
     module ParseToken
-      def process(sequence)
-        return ParsedData.new(@name).set_attributes(@parse_token_proc.call(sequence.shift))
+      def process(sequence, parent)
+        return ParsedData.new(@name, parent).set_attributes(@parse_token_proc.call(sequence.shift))
       end
     end
 
     module ParseSequence
-      def process(sequence)
-        return ParsedData.new(@name).set_attributes(@parse_sequence_proc.call(sequence))
+      def process(sequence, parent)
+        return ParsedData.new(@name, parent).set_attributes(@parse_sequence_proc.call(sequence))
       end
     end
     
@@ -108,7 +108,7 @@ module Noratext
         false
       end
       
-      def process_one_element(sequence)
+      def process_one_element(sequence, parent)
 
         while (sequence.size > 0 && sequence[0][:kind] == :closetag)
           return nil if (is_end_of_element(sequence[0]))
@@ -119,7 +119,7 @@ module Noratext
 
         element_to_parse.each {
           |element|
-          return element.process(sequence) if element.accept?(sequence[0])
+          return element.process(sequence, parent) if element.accept?(sequence[0])
         }
         nil
       end
@@ -164,10 +164,11 @@ module Noratext
     end
 
     class ParsedData
-      attr_accessor :type, :children
+      attr_accessor :type, :children, :parent
 
-      def initialize(type, children = [])
+      def initialize(type, parent, children = [])
         @children = children
+        @parent = parent
         @type = type
         @attributes = {}
       end

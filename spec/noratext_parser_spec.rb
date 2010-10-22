@@ -31,7 +31,7 @@ describe "Noratext::Parser" do
     element.accept?({ :type => :center, :tag => { :name => :center, :kind => :opentag }}).should be_true
     a = element.process([{ :type => :center, :tag => { :name => :center, :kind => :opentag }},
                        { :type => :text, :data => "foobar" },
-                         { :type => :center, :tag => { :name => :center, :kind => :closetag}}])
+                         { :type => :center, :tag => { :name => :center, :kind => :closetag}}], nil)
     a.type.should == :center
     a.is_leaf?.should_not be_true
     a.children.size.should == 1

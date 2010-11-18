@@ -164,6 +164,7 @@ module Noratext
     end
 
     class ParsedData
+      include Enumerable
       attr_accessor :type, :children, :parent
 
       def initialize(type, parent, children = [])
@@ -181,10 +182,25 @@ module Noratext
         @attributes.merge!(value)
         value.each {
           |k,v|
-          (class<<self;self;end).instance_eval{define_method(k){v}}
+          (class << self; self; end).instance_eval{define_method(k){v}}
         }
         self
       end
+
+      def each (&block)
+        yield self
+        @children.each {
+          |child|
+          child.each (&block)
+        }
+        self
+      end
+      
+      # can't search inside tag like 'ruby'.
+      def search_regex(regex)
+        select { |elem| elem.type == :text && regex =~ elem.data }
+      end
+
     end
   end
 end

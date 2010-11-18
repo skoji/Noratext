@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+$KCODE='u'
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require File.expand_path(File.dirname(__FILE__) + '/ydml_grammer_definition')
 
@@ -80,8 +81,29 @@ describe Noratext::Parser do
     result.children[1].children[0].type.should == :ruby
     result.children[1].children[0].ruby.should == 'とんぼ'
     result.children[1].children[0].body.should == '蜻蛉'
+  end
+end
+
+describe Noratext::Parser::ParsedData do
+
+  it "should search data" do
+    seq = [ { :type => :center, :tag => { :name => :center, :kind => :opentag}},
+            { :type => :text, :data=>'センタリング', :line => 1},
+            { :type => :center, :tag => { :name => :center, :kind => :closetag}},
+            { :type => :ruby, :tag => { :name => :ruby, :kind => :opentag }},
+            { :type => :text, :data => '蜻蛉/とんぼ', :line => 2 },
+            { :type => :ruby,:tag => { :name => :ruby, :kind => :closetag }},
+            { :type => :text, :data=>'蜻蛉か', :line => 1},
+          ]
+
+    parser = Noratext::Parser.generate(:ydml)
+    result = parser.parse(seq)
+    
+    a = result.select { |elem| elem.type == :text && elem.data == 'センタリング' }
+    a.size.should == 1
+    a[0].type.should == :text
+    a[0].data.should == 'センタリング'
 
   end
-  
 end
 
